@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Add Members to Team "{{ team.name }}"</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Add Members</button>
+    </form>
+    {% if available_users %}
+    <h2>Available Users to Add:</h2>
+    <ul>
+        {% for user in available_users %}
+        <li>{{ user.email }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No available users to add.</p>
+    {% endif %}
+</div>
+{% endblock %}

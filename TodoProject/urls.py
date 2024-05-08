@@ -22,7 +22,6 @@ from django.urls import re_path
 
 urlpatterns = [
     path('', include('tasks.urls')),
-
     path('admin/', admin.site.urls),
     path('users/', include('accounts.urls')),
     path('teams/', include('teams.urls')),

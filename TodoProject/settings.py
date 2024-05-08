@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap4",
     # The following apps are required:
-
+    
 
         ###
     'django.contrib.admin',
@@ -58,6 +58,8 @@ INSTALLED_APPS = [
 
 
 ]
+SITE_ID = 1
+
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
@@ -137,7 +139,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -157,8 +158,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'TodoProject/static'),
     # Add more directories if necessary
 ]
-
-LOGIN_REDIRECT_URL='/'
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -168,7 +169,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # social auth configs for github
 SOCIAL_AUTH_GITHUB_KEY = 'Ov23lih3R7EtHzOR4Qzq'
-SOCIAL_AUTH_GITHUB_SECRET = 'b7ee0234fc885f2705ec04826baa09f266ffe83e'
+SOCIAL_AUTH_GITHUB_SECRET = '43ba05cf8c932f17bc670c9b3394c7c39e6ed337'
 
 
 AUTHENTICATION_BACKENDS = [
