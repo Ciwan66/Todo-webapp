@@ -167,10 +167,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-# social auth configs for github
-SOCIAL_AUTH_GITHUB_KEY = 'Ov23lih3R7EtHzOR4Qzq'
-SOCIAL_AUTH_GITHUB_SECRET = '43ba05cf8c932f17bc670c9b3394c7c39e6ed337'
-
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

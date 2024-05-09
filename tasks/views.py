@@ -7,6 +7,7 @@ from django.urls import reverse , reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from .mixins import OwnerMixin
+
 class TaskList(LoginRequiredMixin,ListView):
     model = Task
     template_name = 'tasks/task_list.html'

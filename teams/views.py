@@ -9,6 +9,10 @@ from django.urls import reverse_lazy,reverse
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from accounts.models import CustomUser
+from tasks.views import TaskList
+from tasks.models import Task
+
+
 # Create your views here.
 
 class TeamList(LoginRequiredMixin,ListView):
@@ -84,3 +88,14 @@ class TeamAddMember(LoginRequiredMixin, View):
             return redirect('team_detail', pk=pk)
         else:
             return render(request, self.template_name, {'form': form, 'team_id': pk})
+        
+
+
+class TeamTaskList(TaskList):
+    def get_queryset(self):
+        team_id = self.kwargs['pk']
+        team=Team.objects.get(pk=team_id)
+        return Task.objects.filter(team=team)
+    
+
+    
