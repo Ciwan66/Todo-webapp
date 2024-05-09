@@ -9,7 +9,7 @@ from django.urls import reverse_lazy,reverse
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from accounts.models import CustomUser
-from tasks.views import TaskList
+from tasks.views import TaskList , TaskCreate
 from tasks.models import Task
 
 
@@ -96,6 +96,18 @@ class TeamTaskList(TaskList):
         team_id = self.kwargs['pk']
         team=Team.objects.get(pk=team_id)
         return Task.objects.filter(team=team)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["team_id"] = self.kwargs['pk']
+        return context
     
+    
+class TeamTaskCreate(TaskCreate):
+    def get_success_url(self) :
+        team_id = self.kwargs['pk']
+        return reverse('team_task_list',kwargs={'pk':team_id})
 
-    
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.team = Team.objects.get(pk=self.kwargs['pk'])
+        return super().form_valid(form)

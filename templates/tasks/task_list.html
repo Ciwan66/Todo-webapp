@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row mb-3">
         <div class="row justify-content-center align-items-center mt-4" >
-            <a href="{% url 'task_create' %}" class="btn btn-primary btn-sm">Create Task</a>
+            <a href="{% if '/team_task_list' in request.path %} {% url 'team_task_create' team_id %} {% else %}{% url 'task_create' %}{% endif %}" class="btn btn-primary btn-sm">Create Task</a>
         </div>
     </div>
 
@@ -13,7 +13,7 @@
     <div class="card mb-3">
         <div class="card-body">
             <h2 class="card-title">Name: {{ task.title }}</h2>
-            <h2 class="card-text">Description: {{ task.description }}</h2>
+            <h2 class="card-text">Description: {{task.description}}</h2>
             <div class="mt-3">
                 <form action="{% url 'task_delete' task.id %}" method="post" class="mr-2 d-inline">
                     {% csrf_token %}
