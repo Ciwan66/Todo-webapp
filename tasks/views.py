@@ -7,6 +7,7 @@ from django.urls import reverse , reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from .mixins import TaskOwnerMixin ,TaskMemberMixin
+from django.db.models import Q
 
 class TaskList(LoginRequiredMixin,ListView):
     model = Task
@@ -15,7 +16,8 @@ class TaskList(LoginRequiredMixin,ListView):
 
 
     def get_queryset(self):
-        return Task.objects.filter(user=self.request.user)
+        return Task.objects.filter(Q(user=self.request.user) | Q(team__members=self.request.user)).distinct()
+
     
 
 class TaskCreate(LoginRequiredMixin,SuccessMessageMixin,CreateView):

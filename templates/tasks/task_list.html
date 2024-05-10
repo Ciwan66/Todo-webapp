@@ -4,52 +4,83 @@
 
 <div class="container">
     <div class="row mb-3">
-        <div class="row justify-content-center align-items-center mt-4" >
+        <div class="row justify-content-center align-items-center mt-4">
             <a href="{% if '/team_task_list' in request.path %} {% url 'team_task_create' team_id %} {% else %}{% url 'task_create' %}{% endif %}" class="btn btn-primary btn-sm">Create Task</a>
         </div>
     </div>
+    <div class="row justify-content-center">
+        {% if 'team_task_list' not in request.path %}
 
-    {% for task in tasks %}
-    <div class="card mb-3">
-        <div class="card-body">
-            <h2 class="card-title">Name: {{ task.title }} </h2>
-            <h2 class="card-text">Description: {{task.description}}</h2>
-            <div class="mt-3">
-                {% if not '/team_task_list' in request.path %}
-                <form action="{% url 'task_delete' task.id %}" method="post" class="mr-2 d-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
-                <a href="{% url "task_update" task.id %}" class="btn btn-primary btn-sm mr-2">Edit</a>
-                <a href="{% url 'task_detail' task.id %}" class="btn btn-info btn-sm">Detail</a>
-                {% else %}
-                {% if request.user == task.team.owner %}
-                <form action="{% url 'task_delete' task.id %}" method="post" class="mr-2 d-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
-                <a href="{% url "task_update" task.id %}" class="btn btn-primary btn-sm mr-2">Edit</a>
-                {% endif %}
-                <a href="{% url 'team_task_detail'   request.path|cut:'/teams/'|cut:'/team_task_list' task.id  %}" class="btn btn-info btn-sm">Detail</a>
-
-                {% endif %}
-
+        <div class="col-md-4 me-4" style="  background: #eee;
+        box-shadow: 0 8px 8px -4px lightblue;">
+            <div class="text-center">
+            <h1>My Tasks</h1>
             </div>
+            {% for task in tasks %}
+            {% if task.team is none %}
+                <div class="card mb-3" style="background: #eee;box-shadow: 0 2px 2px -1px lightblue;">
+                    <div class="card-body"style="background: #eee;box-shadow: 0 2px 2px -1px black;">
+                        <h6 class="card-title">Task Title: {{ task.title }} </h6>
+                        <p class="card-text" style="font-size: 12px;">Task Description: {{task.description}}</p>
+                        <div class="mt-2 d-inline">
+                                <form action="{% url 'task_delete' task.id %}" method="post" class="mr-2 d-inline">
+                                    {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                                <a href="{% url "task_update" task.id %}" class="btn btn-primary btn-sm mr-2">Edit</a>
+     
+                                <a href="{% url 'task_detail' task.id %}" class="btn btn-info btn-sm">Detail</a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+
+            {% endif %}
+               
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="col-md-4" style="  background: #eee;
+        box-shadow: 0 8px 8px -4px lightblue;">
+        <div class="text-center">
+            <h1>My Teams Tasks</h1>
+            </div>
+            {% for task in tasks %}
+            {% if task.team is not none %}
+                <div class="card mb-3" style="background: #eee;box-shadow: 0 2px 2px -1px lightblue;">
+                    <div class="card-body" style="background: #eee;box-shadow: 0 2px 2px -1px black;">
+                        <h6 class="card-title">Task Title: {{ task.title }} </h6>
+                        <p class="card-text" style="font-size: 12px;">Task Description: {{task.description}}</p>
+                        <div class="mt-2 d-inline">
+  
+                                {% if request.user == task.team.owner %}
+                                    <form action="{% url 'task_delete' task.id %}" method="post" class="mr-2 d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                    <a href="{% url "task_update" task.id %}" class="btn btn-primary btn-sm mr-2">Edit</a>
+                                {% endif %}
+                                <a href="{% url 'team_task_detail'   task.team.id task.id  %}" class="btn btn-info btn-sm">Detail</a>
+                        </div>
+                    </div>
+                </div>
+
+
+            {% endif %}
+               
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
     
     <div class="container">
         {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-{% endif %}
-
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
-
-</div>
-
 
 {% endblock content %}

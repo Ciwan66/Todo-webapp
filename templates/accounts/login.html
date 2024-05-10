@@ -6,10 +6,10 @@
 Login Page
 {% endblock title %}
 {% block content %}
-<div class="container">
-    <h1 class="mt-5 mb-4">Login Page</h1>
-    <div class="row">"
-        <div class="col-md-6">
+<div class="container"  style="background-color: #EDEADE;">
+    <h1 class="mt-5  p-3 " >Login Page</h1>
+    <div class="row">
+        <div class="col-md-6 p-4">
             <form action="" method="POST">
                 {% csrf_token %}
                 {{form|crispy}}

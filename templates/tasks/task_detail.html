@@ -10,15 +10,16 @@
 
 </div>
 <div class="container">
+
+    
     <div class="row justify-content-center align-items-center" style="height: 100vh;">
-        <div class="col-md-8">
+        <div class="col-md-8 p-5" style="background-color: #EDEADE	;">
             <div class="card">
                 <div class="card-body">
                     <h2 class="card-title">Task: {{ task.title }} </h2>
                     <h2 class="card-text">Description: {{ task.description }}</h2>
                     <div class="d-flex justify-content-between align-items-center mt-3">
-
-                        {% if request.user == task.team.owner %}
+                        {% if task.team is none or request.user == task.team.owner%}
                         <form action="{% url 'task_delete' task.id %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger">Delete</button>
@@ -34,6 +35,8 @@
             </div>
         </div>
     </div>
+
+    
 </div>
 
 {% endblock content %}

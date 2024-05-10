@@ -11,11 +11,11 @@
 </div>
 <div class="container">
     <div class="row justify-content-center align-items-center" style="height: 100vh;">
-        <div class="col-md-8">
+        <div class="col-md-8 p-5" style="background-color: #EDEADE	;">
             <div class="card">
                 <div class="card-body">
-                    <h2 class="card-title">Task: {{ team.name }}</h2>
-                    <h2 class="card-text">Description: {{ team.description }}</h2>
+                    <h2 class="card-title">Team Name: {{ team.name }}</h2>
+                    <p class="card-text">Team Description: {{ team.description }}</p>
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         {% if team.owner == request.user %}
                         <form action="{% url "team_delete" team.id %}" method="post">
@@ -25,7 +25,7 @@
                         <a href="{% url "team_update" team.id %}" class="btn btn-primary btn-sm mr-2">Edit</a>
                         <a href="{% url "team_add_member" team.id %}" class="btn btn-primary btn-sm mr-2">Add member</a>
                         {% endif %}
-                        <a href="" class="btn btn-info btn-sm">View Team Tasks</a>
+                        <a href="{% url "team_task_list" team.id%}" class="btn btn-info btn-sm">View Team Tasks</a>
 
                     </div>
                 </div>
