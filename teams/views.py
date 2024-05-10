@@ -9,7 +9,7 @@ from django.urls import reverse_lazy,reverse
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from accounts.models import CustomUser
-from tasks.views import TaskList , TaskCreate
+from tasks.views import TaskList , TaskCreate ,TaskDetail,TaskDelete,TaskUpdate
 from tasks.models import Task
 from django.core.exceptions import PermissionDenied
 
@@ -97,7 +97,7 @@ class TeamAddMember(LoginRequiredMixin, View):
         else:
             return render(request, self.template_name, {'form': form, 'team_id': pk})
         
-
+#################################
 
 class TeamTaskList(TaskList):
     def dispatch(self, request, *args, **kwargs):
@@ -135,3 +135,15 @@ class TeamTaskCreate(TaskCreate):
         obj = form.save(commit=False)
         obj.team = Team.objects.get(pk=self.kwargs['pk'])
         return super().form_valid(form)
+
+class TeamTaskDetail(TaskDetail):
+    
+    def dispatch(self, request, *args, **kwargs):
+        team = Team.objects.get(pk=kwargs['team'])
+        task = Task.objects.get(pk=kwargs['pk'])
+    
+        if self.request.user in team.members.all() and task.team == team:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+    
