@@ -1,6 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-its index
-
+<div class="container">
+    <h1 class="mt-5">My To-Do List</h1>
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <!-- Information about Logging In -->
+            <h2>Login</h2>
+            <p>To start managing your to-do list, please login with your credentials.</p>
+            <p>If you don't have an account yet, you can <a href="{% url "users_register" %}">sign up here</a>.</p>
+        </div>
+        <div class="col-md-6">
+            <!-- Information about Task Management and Team Collaboration -->
+            <h2>Task Management and Team Collaboration</h2>
+            <p>Once logged in, you can add tasks to your to-do list and collaborate with your team:</p>
+            <ul>
+                <li>Create teams to organize tasks with your colleagues.</li>
+                <li>Add tasks and assign them to team members.</li>
+                <li>Invite team members to join your team and work together.</li>
+                <li>Track the progress of tasks and manage deadlines efficiently.</li>
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock content %}

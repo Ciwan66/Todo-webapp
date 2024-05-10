@@ -11,6 +11,7 @@ from django.contrib import messages
 from accounts.models import CustomUser
 from tasks.views import TaskList , TaskCreate
 from tasks.models import Task
+from django.core.exceptions import PermissionDenied
 
 
 # Create your views here.
@@ -24,7 +25,7 @@ class TeamList(LoginRequiredMixin,ListView):
         return Team.objects.filter(Q(owner = self.request.user)| Q(members = self.request.user) )
     
 
-class TeamDetail(LoginRequiredMixin,DetailView):
+class TeamDetail(LoginRequiredMixin,TeamMemberMixin,DetailView):
     model = Team
     template_name = 'teams/team_detail.html'
     context_object_name = 'team'
@@ -66,6 +67,13 @@ class TeamAddMember(LoginRequiredMixin, View):
     template_name = 'teams/team_add_member.html'
     form_class = AddMemberForm
     success_url = reverse_lazy('team_list')
+    def dispatch(self, request, *args, **kwargs):
+            team = Team.objects.get(pk=kwargs['pk'])
+            if self.request.user == team.owner:
+                return super().dispatch(request, *args, **kwargs)
+            else:
+                raise PermissionDenied
+        
 
     def get(self, request, pk):
         team = Team.objects.get(id=pk)
@@ -92,6 +100,13 @@ class TeamAddMember(LoginRequiredMixin, View):
 
 
 class TeamTaskList(TaskList):
+    def dispatch(self, request, *args, **kwargs):
+        team = Team.objects.get(pk=kwargs['pk'])
+        if self.request.user in team.members.all():
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+    
     def get_queryset(self):
         team_id = self.kwargs['pk']
         team=Team.objects.get(pk=team_id)
@@ -103,6 +118,15 @@ class TeamTaskList(TaskList):
     
     
 class TeamTaskCreate(TaskCreate):
+    def dispatch(self, request, *args, **kwargs):
+        team_id = kwargs['pk']
+        team = Team.objects.get(pk=team_id)
+        if self.request.user == team.owner:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+    
     def get_success_url(self) :
         team_id = self.kwargs['pk']
         return reverse('team_task_list',kwargs={'pk':team_id})

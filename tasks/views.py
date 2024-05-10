@@ -6,7 +6,7 @@ from .forms import TaskForm
 from django.urls import reverse , reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from .mixins import OwnerMixin
+from .mixins import TaskOwnerMixin ,TaskMemberMixin
 
 class TaskList(LoginRequiredMixin,ListView):
     model = Task
@@ -31,18 +31,18 @@ class TaskCreate(LoginRequiredMixin,SuccessMessageMixin,CreateView):
         return super().form_valid(form)
     
 
-class TaskDetail(LoginRequiredMixin,OwnerMixin,DetailView):
+class TaskDetail(LoginRequiredMixin,TaskMemberMixin,DetailView):
     model = Task
     context_object_name = 'task'
     template_name = "tasks/task_detail.html"
     
 
-class TaskDelete(LoginRequiredMixin, OwnerMixin,SuccessMessageMixin, DeleteView):
+class TaskDelete(LoginRequiredMixin, TaskOwnerMixin,SuccessMessageMixin, DeleteView):
     model = Task
     success_url = reverse_lazy('task_list')
     success_message= "Task Deleted Successfuly"
 
-class TaskUpdate(LoginRequiredMixin,OwnerMixin,SuccessMessageMixin,UpdateView):
+class TaskUpdate(LoginRequiredMixin,TaskOwnerMixin,SuccessMessageMixin,UpdateView):
     form_class = TaskForm
     template_name = 'tasks/task_update.html'
     model = Task
